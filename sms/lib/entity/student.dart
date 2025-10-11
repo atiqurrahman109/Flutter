@@ -1,57 +1,54 @@
-
-
-import 'package:sms/entity/payment.dart';
-import 'package:sms/entity/result.dart';
-
+// student.dart
 import 'user.dart';
 import 'section.dart';
 import 'school_class.dart';
 
-class Student {
-  final int id;
-  final String name;
-  final String email;
-  final String photo;
-  final User user;
-  final Section section;
-  final List<Payment> payments;
-  final List<Result> results;
-  final SchoolClass schoolClass;
+class Students {
+  int? id;
+  String? name;
+  String? email;
+  String? photo;
+  User? user;
+  Section? section;
+  SchoolClass? schoolClass;
 
-  Student({
-    required this.id,
-    required this.name,
-    required this.email,
-    required this.photo,
-    required this.user,
-    required this.section,
-    required this.payments,
-    required this.results,
-    required this.schoolClass,
+  Students({
+    this.id,
+    this.name,
+    this.email,
+    this.photo,
+    this.user,
+    this.section,
+    this.schoolClass,
   });
 
-  factory Student.fromJson(Map<String, dynamic> json) {
-    return Student(
+  factory Students.fromJson(Map<String, dynamic> json) {
+    return Students(
       id: json['id'],
       name: json['name'],
       email: json['email'],
       photo: json['photo'],
-      user: User.fromJson(json['user']),
-      section: Section.fromJson(json['section']),
-      payments: (json['payments'] as List)
-          .map((p) => Payment.fromJson(p))
-          .toList(),
-      results: (json['results'] as List)
-          .map((r) => Result.fromJson(r))
-          .toList(),
-      schoolClass: SchoolClass.fromJson(json['schoolClass']),
+      user: (json['user'] != null && json['user'] is Map<String, dynamic>)
+          ? User.fromJson(json['user'])
+          : null,
+      section: (json['section'] != null && json['section'] is Map<String, dynamic>)
+          ? Section.fromJson(json['section'])
+          : null,
+      schoolClass: (json['schoolClass'] != null && json['schoolClass'] is Map<String, dynamic>)
+          ? SchoolClass.fromJson(json['schoolClass'])
+          : null,
     );
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'id': id,
-      'name': name,
-    };
+    final Map<String, dynamic> data = {};
+    data['id'] = id;
+    data['name'] = name;
+    data['email'] = email;
+    data['photo'] = photo;
+    if (user != null) data['user'] = user!.toJson();
+    if (section != null) data['section'] = section!.toJson();
+    if (schoolClass != null) data['schoolClass'] = schoolClass!.toJson();
+    return data;
   }
 }

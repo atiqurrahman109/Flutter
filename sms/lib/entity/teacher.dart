@@ -1,20 +1,15 @@
-// teacher.dart
-import 'user.dart';
+import 'package:sms/entity/user.dart';
 
 class Teacher {
-  final int id;
-  final String name;
-  final String email;
-  final String phone;
-  final String photo;
-  final User user;
+  int id;
+  String name;
+  String? photo;
+  User user;
 
   Teacher({
     required this.id,
     required this.name,
-    required this.email,
-    required this.phone,
-    required this.photo,
+    this.photo,
     required this.user,
   });
 
@@ -22,10 +17,17 @@ class Teacher {
     return Teacher(
       id: json['id'],
       name: json['name'],
-      email: json['email'],
-      phone: json['phone'],
       photo: json['photo'],
-      user: User.fromJson(json['user']),
+      user: User.fromJson(json['user'] ?? {}),
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'photo': photo,
+      'user': user.toJson(),
+    };
   }
 }

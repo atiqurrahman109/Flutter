@@ -8,7 +8,7 @@ class Payment {
   final double amount;
   final bool paid;
   final DateTime paymentDate;
-  final Student student;
+  final Students student;
 
   Payment({
     required this.id,
@@ -28,7 +28,7 @@ class Payment {
       amount: (json['amount'] as num).toDouble(),
       paid: json['paid'],
       paymentDate: DateTime.parse(json['paymentDate']),
-      student: Student.fromJson(json['student']),
+      student: Students.fromJson(json['student']),
     );
   }
 

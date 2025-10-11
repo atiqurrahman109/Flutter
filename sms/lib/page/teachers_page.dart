@@ -1,8 +1,6 @@
-// teachers_page.dart
 import 'package:flutter/material.dart';
 import 'package:sms/entity/teacher.dart';
 import 'package:sms/service/teacher_service.dart';
-
 
 class TeachersPage extends StatefulWidget {
   @override
@@ -23,7 +21,7 @@ class _TeachersPageState extends State<TeachersPage> {
     try {
       await _teacherService.deleteTeacher(id);
       setState(() {
-        _teachersFuture = _teacherService.getAllTeachers(); // Refresh
+        _teachersFuture = _teacherService.getAllTeachers(); // Refresh list
       });
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -47,12 +45,14 @@ class _TeachersPageState extends State<TeachersPage> {
       body: FutureBuilder<List<Teacher>>(
         future: _teachersFuture,
         builder: (context, snapshot) {
-          if (snapshot.connectionState == ConnectionState.waiting)
+          if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
-          else if (snapshot.hasError)
-            return Center(child: Text('Error loading teachers'));
-          else if (!snapshot.hasData || snapshot.data!.isEmpty)
+          } else if (snapshot.hasError) {
+            print("Error loading teachers: ${snapshot.error}");
+            return Center(child: Text('Error loading teachers: ${snapshot.error}'));
+          } else if (!snapshot.hasData || snapshot.data!.isEmpty) {
             return Center(child: Text('No teachers found'));
+          }
 
           final teachers = snapshot.data!;
           return ListView.builder(
@@ -61,12 +61,15 @@ class _TeachersPageState extends State<TeachersPage> {
               final teacher = teachers[index];
               return ListTile(
                 leading: CircleAvatar(
-                  backgroundImage: NetworkImage(
-                    'http://localhost:8080/images/teachers/${teacher.photo}',
-                  ),
+                  // backgroundImage: NetworkImage(
+                  //   'http://192.168.0.105:8080/images/teachers/${teacher.photo}',
+                  // ),
+                  // onBackgroundImageError: (_, __) {
+                  //   print("Failed to load image for ${teacher.name}");
+                  // },
                 ),
                 title: Text(teacher.name),
-                subtitle: Text(teacher.email),
+                subtitle: Text(teacher.user.email), // email from user object
                 trailing: Wrap(
                   spacing: 8,
                   children: [
